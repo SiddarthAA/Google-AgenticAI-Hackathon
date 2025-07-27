@@ -3,7 +3,7 @@ from apify_client import ApifyClient
 
 class InstagramScraper:
     def __init__(self, api_token):
-        self.client = ApifyClient("API") #API ask anish
+        self.client = ApifyClient("apify_api_bLWUs4dQnkjztqDT49BL6gFoPVpaZa07P3CC") #API ask anish
         self.mention_account = "blr.now" 
 
     #Finding n number of mentions of @blr.now
