@@ -1,0 +1,53 @@
+{
+  "uid": "string",                     // Unique identifier (UUID/hash)
+
+  "title": "string",                   // News headline
+  "description": "string",             // Main news content or summary
+
+  "author": "string|null",             // Source or author name
+  "source_url": "string|null",         // Original source/article link
+
+  "location": {
+    "name": "string|null",             // Location name (e.g., Whitefield)
+    "latitude": "float|null",          // Latitude
+    "longitude": "float|null"          // Longitude
+  },
+
+  "published_at": "ISO datetime",      // Original publication date/time
+
+  "media": [
+    "string"                           // URLs of images/videos (if any)
+  ],
+
+  "analysis": {
+    "sentiment": -1.0,                 // Sentiment score in [-1, 1]
+    "tags": ["string"],                // Tags like traffic, outage, protest
+    "entities": ["string"],            // Civic entities or keywords (BBMP, BESCOM)
+    "priority_status": "high|medium|low" // Priority of the news
+  },
+
+  "engagement": {
+    "count": 0,                        // Mention/engagement count
+    "radio_jockey": "string|null"      // Linked RJ or reporter if relevant
+  },
+
+  "predictions": [
+    "string",                          // p1 - Most likely possible outcome
+    "string",                          // p2 - Second most likely outcome
+    "string"                           // p3 - Third most likely outcome
+  ],
+
+  "validity": {
+    "score_presence": 0.0,             // Weighted score of key fields present
+    "score_relevance": 0.0,            // Weighted relevance of entities/keywords
+    "score_media": 0.0,                // Media & author presence contribution
+    "score_location": 0.0,             // Location accuracy contribution
+    "gemini_score": 0.0,               // AI validation (Gemini grounding score)
+    "final_weighted_score": 0.0        // Final combined score
+  },
+
+  "hash": {
+    "embedding": null,                 // Placeholder for embedding vector
+    "embedding_text": "uid + title + description + location"
+  }
+}

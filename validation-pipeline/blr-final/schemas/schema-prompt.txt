@@ -1,0 +1,82 @@
+You are given unstructured raw news or social media content. Your task is to strictly transform this data into a structured JSON object according to the schema provided below.
+
+**Rules:**
+1. Use ONLY the information present in the raw text: **DO NOT add, infer, or hallucinate any extra information**.
+2. If a field's value is missing or not present, set it to `null`, an empty list `[]`, or a default value (0 for counts, 0.0 for scores).
+3. Keep all field types and formats exactly as defined (e.g., `ISO datetime` for dates, `float` for scores).
+4. Ensure all keys in the schema are always present, even if values are null.
+5. For `sentiment`, provide a number between -1.0 (negative) and +1.0 (positive), or 0.0 if neutral.
+6. For `prefrences`, select up to 3 most relevant tags from the following list: `Traffic`, `Weather`, `Infrastructure`, `Events`, `Emergency`, `Health`, `Education`, `Transport`, `Power`, `Other`. If fewer than 3 are relevant, select fewer. For `entities`, populate from content keywords (limit to 3 MAX).
+7. For `priority_status`, determine if the event is 'high', 'medium', or 'low' based on its urgency, impact, and significance as described in the raw content.
+8. Make the `title` and `description` concise and to the point, summarizing the core information effectively.
+9. For `engagement.radio_jockey`, set to `true` if the news is good or important enough to be featured by a radio jockey; otherwise, set to `false`.
+10. **Do not fill or compute `hash.embedding`** but generate the `embedding_text` as `nid + title + description + location`.
+11. Fill out the top 3 possible predictions that this event might have, ensuring they are strictly related to Bangalore and its surrounding areas.
+12. For `validity` scores:
+    - `score_presence`: Score between 0.0 and 1.0 based on the completeness of the extracted data (how many fields were successfully populated from the raw content).
+    - `score_relevance`: Score between 0.0 and 1.0 based on how relevant the raw content is to the expected schema (e.g., news/event data).
+    - `score_media`: Score between 0.0 and 1.0 based on the presence and quality of media information (if any).
+    - `score_location`: Score between 0.0 and 1.0 based on the presence and specificity of location information.
+    - `gemini_score`: An overall confidence score (0.0-1.0) from your analysis on the quality of the extracted data.
+    - `final_weighted_score`: Calculate this as a weighted average, for example: `(0.2 * score_presence) + (0.3 * score_relevance) + (0.1 * score_media) + (0.2 * score_location) + (0.2 * gemini_score)`.
+13. Output **only valid JSON** — no extra commentary or text.
+
+---
+
+**Schema Template:**
+{
+  "nid": "string",
+  "title": "string|null",
+  "description": "string",
+  "source": "scrapped or user entry",
+  "source_url": "string|null",
+  "location": {
+    "name": "string|null",
+    "latitude": "float|null",
+    "longitude": "float|null"
+  },
+
+  "published_at": "ISO datetime|null",
+  "media": ["string"],
+
+  "analysis": {
+    "sentiment": -1.0,
+    "preferences": ["string"],
+    "priority_status": "high|medium|low"
+  },
+
+  "engagement": {
+    "count": 0,
+    "radio_jockey": "boolean"
+  },
+
+  "predictions": [
+    "string",
+    "string",
+    "string"
+  ],
+
+  "validity": {
+    "score_presence": 0.0,
+    "score_relevance": 0.0,
+    "score_media": 0.0,
+    "score_location": 0.0,
+    "gemini_score": 0.0,
+    "final_weighted_score": 0.0
+  },
+
+  "hash": {
+    "embedding": null,
+    "embedding_text": "nid + title + location"
+  }
+}
+
+---
+
+**Raw Content:**
+{raw}
+
+---
+
+**Task:**
+Analyze the above raw content and convert it into the given schema strictly. Return **only** the JSON object, with no additional comments or text.
